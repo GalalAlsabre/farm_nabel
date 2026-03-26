@@ -4,13 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>سجل قياسات المحاليل الزراعية</title>
-
     <!-- استدعاء خط تاجوال من جوجل -->
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-
     <!-- مكتبة تحويل الصفحة إلى PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
     <style>
         :root {
             --primary-color: #2E7D32;
@@ -27,7 +24,7 @@
             padding: 20px;
         }
         .container {
-            max-width: 1200px;
+            max-width: 1300px;
             margin: auto;
             background: white;
             padding: 20px;
@@ -38,7 +35,6 @@
             text-align: center;
             color: var(--primary-color);
         }
-        /* تعديل الحقول الأساسية لتكون في سطر واحد */
         .header-info {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -47,16 +43,11 @@
             padding-bottom: 20px;
             border-bottom: 2px dashed var(--primary-color);
         }
-        /* لتجاوب الشاشات الصغيرة (الجوال) */
         @media (max-width: 768px) {
-            .header-info {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            .header-info { grid-template-columns: repeat(2, 1fr); }
         }
         @media (max-width: 480px) {
-            .header-info {
-                grid-template-columns: 1fr;
-            }
+            .header-info { grid-template-columns: 1fr; }
         }
         .input-group {
             display: flex;
@@ -106,27 +97,24 @@
             font-family: inherit;
             transition: 0.3s;
         }
-        button:hover {
-            background-color: #1b5e20;
-        }
+        button:hover { background-color: #1b5e20; }
         .btn-delete { background-color: #d32f2f; }
         .btn-delete:hover { background-color: #b71c1c; }
         .btn-edit { background-color: #fbc02d; color: black; }
         .btn-edit:hover { background-color: #f9a825; }
         .btn-export { background-color: #1976D2; margin-bottom: 15px; }
         .btn-export:hover { background-color: #1565C0; }
-        .table-responsive {
-            overflow-x: auto;
-        }
+        .table-responsive { overflow-x: auto; }
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
             background: white;
+            font-size: 14px;
         }
         th, td {
             border: 1px solid var(--border-color);
-            padding: 10px;
+            padding: 8px;
             text-align: center;
             vertical-align: middle;
         }
@@ -137,23 +125,18 @@
         }
         tr:nth-child(even) { background-color: #f9f9f9; }
 
-        /* ======== الأكواد الجديدة المسؤولة عن حل المشكلة ======== */
+        /* ======== خدعة الـ Rowspan للـ PDF ======== */
         .fake-rowspan-top {
-            border-bottom: none !important; /* إخفاء الخط السفلي */
-            vertical-align: bottom; /* تقريب النص ليكون في منتصف الخلية الوهمية */
+            border-bottom: none !important;
+            vertical-align: bottom;
             padding-bottom: 6px;
         }
         .fake-rowspan-bottom {
-            border-top: none !important; /* إخفاء الخط العلوي */
+            border-top: none !important;
             padding-top: 6px;
         }
-        /* ======================================================= */
 
-        /* تنسيقات خاصة تفعّل فقط عند تصدير الـ PDF */
-        .printing .header-info {
-            border-bottom: none;
-            grid-template-columns: repeat(4, 1fr);
-        }
+        .printing .header-info { border-bottom: none; grid-template-columns: repeat(4, 1fr); }
         .printing .header-info input {
             border: none !important;
             background: transparent !important;
@@ -163,13 +146,8 @@
             font-size: 16px !important;
             text-align: right !important;
             direction: rtl !important;
-            -webkit-appearance: none;
-            appearance: none;
         }
-        /* إخفاء أيقونة التقويم في حقل التاريخ عند الطباعة */
-        .printing .header-info input[type="date"]::-webkit-calendar-picker-indicator {
-            display: none;
-        }
+        .printing .header-info input[type="date"]::-webkit-calendar-picker-indicator { display: none; }
         
         @media print {
             .no-print { display: none !important; }
@@ -181,38 +159,21 @@
 <body>
 
 <div class="container" id="mainContainer">
-    <h1>سجل متابعة المحاليل الزراعية (قراضة)</h1>
+    <h1>سجل متابعة المحاليل الزراعية</h1>
 
-    <!-- معلومات المزرعة (الرأس) -->
     <div class="header-info" id="reportHeader">
-        <div class="input-group">
-            <label>الموقع رقم المحمية:</label>
-
-            <input type="text" id="siteName" placeholder="مثال: محمية ١٠">
-        </div>
-        <div class="input-group">
-            <label>نوع المحصول:</label>
-            <input type="text" id="cropType" placeholder="مثال: طماطم - بيبر">
-        </div>
-        <div class="input-group">
-            <label>اسم العامل / المسؤول:</label>
-            <input type="text" id="workerName" placeholder="اسم العامل">
-        </div>
-        <div class="input-group">
-            <label>تاريخ الزراعة:</label>
-            <input type="date" id="plantDate">
-        </div>
+        <div class="input-group"><label>الموقع / رقم المحمية:</label><input type="text" id="siteName" placeholder="مثال: محمية ١٠"></div>
+        <div class="input-group"><label>نوع المحصول:</label><input type="text" id="cropType" placeholder="طماطم"></div>
+        <div class="input-group"><label>اسم العامل / المسؤول:</label><input type="text" id="workerName"></div>
+        <div class="input-group"><label>تاريخ الزراعة:</label><input type="date" id="plantDate"></div>
     </div>
 
-    <!-- نموذج إدخال البيانات -->
     <div class="form-section no-print">
         <h2>إدخال / تعديل بيانات يومية</h2>
         <input type="hidden" id="editIndex" value="-1">
         <div class="form-grid">
-            <div class="input-group">
-                <label>التاريخ:</label>
-                <input type="date" id="entryDate">
-            </div>
+            <div class="input-group"><label>التاريخ:</label><input type="date" id="entryDate"></div>
+            
             <div class="section-title">قياس المحلول قبل الإضافة</div>
             <div class="input-group"><label>EC</label><input type="number" step="0.01" id="beforeEC"></div>
             <div class="input-group"><label>PH</label><input type="number" step="0.01" id="beforePH"></div>
@@ -223,68 +184,69 @@
             <div class="input-group"><label>PH</label><input type="number" step="0.01" id="afterPH"></div>
             <div class="input-group"><label>T.D.C</label><input type="number" step="0.01" id="afterTDC"></div>
 
-            <div class="section-title">معلومات إضافية</div>
-            <div class="input-group"><label>كمية الإضافة (ماء+محلول)</label><input type="text" id="addAmount"></div>
+            <div class="section-title">معلومات إضافية ونمو النبات</div>
+            <div class="input-group"><label>كمية الإضافة</label><input type="text" id="addAmount"></div>
             <div class="input-group"><label>كفاءة نظام التصريف</label><input type="text" id="sysEfficiency"></div>
             <div class="input-group"><label>كفاءة التصريف</label><input type="text" id="drainEfficiency"></div>
             <div class="input-group"><label>الحرارة والرطوبة</label><input type="text" id="tempHumid"></div>
+            <!-- الحقول الجديدة -->
+            <div class="input-group"><label>طول النبات</label><input type="text" id="plantLength"></div>
+            <div class="input-group"><label>عدد الفروع</label><input type="text" id="branchCount"></div>
+            <div class="input-group"><label>الأزهار</label><input type="text" id="flowerCount"></div>
         </div>
         <button onclick="saveRecord()" id="saveBtn">حفظ البيانات</button>
         <button onclick="clearForm()" style="background-color: #757575;">إفراغ الحقول</button>
     </div>
 
-    <!-- منطقة الجدول -->
     <div>
         <button class="btn-export no-print" onclick="exportPDF()">📄 تصدير التقرير كملف PDF</button>
         <div class="table-responsive" id="printArea">
             <table id="dataTable">
                 <thead>
                     <tr>
-                        <!-- تم تغيير الـ rowspan إلى كلاسات الخدعة البصرية -->
                         <th class="fake-rowspan-top">التاريخ</th>
                         <th colspan="3">قياس المحلول قبل الإضافة</th>
                         <th colspan="3">قياس بعد الإضافة</th>
-                        <th class="fake-rowspan-top">كمية الإضافة<br>ماء + محلول</th>
-                        <th class="fake-rowspan-top">كفاءة نظام<br>التصريف</th>
-                        <th class="fake-rowspan-top">كفاءة<br>التصريف</th>
-                        <th class="fake-rowspan-top">درجة الحرارة<br>والرطوبة</th>
+                        <th class="fake-rowspan-top">كمية الإضافة</th>
+                        <th class="fake-rowspan-top">نظام التصريف</th>
+                        <th class="fake-rowspan-top">كفاءة التصريف</th>
+                        <th class="fake-rowspan-top">الحرارة والرطوبة</th>
+                        <!-- رؤوس الأعمدة الجديدة -->
+                        <th class="fake-rowspan-top">طول النبات</th>
+                        <th class="fake-rowspan-top">عدد الفروع</th>
+                        <th class="fake-rowspan-top">الأزهار</th>
                         <th class="fake-rowspan-top no-print">الإجراءات</th>
                     </tr>
                     <tr>
-                        <!-- تم إضافة حقول فارغة هنا تعوّض المساحة السفلية -->
                         <th class="fake-rowspan-bottom"></th>
-                        <th>T.D.C</th>
-                        <th>PH</th>
-                        <th>EC</th>
-                        <th>T.D.C</th>
-                        <th>PH</th>
-                        <th>EC</th>
+                        <th>T.D.C</th><th>PH</th><th>EC</th>
+                        <th>T.D.C</th><th>PH</th><th>EC</th>
                         <th class="fake-rowspan-bottom"></th>
+                        <th class="fake-rowspan-bottom"></th>
+                        <th class="fake-rowspan-bottom"></th>
+                        <th class="fake-rowspan-bottom"></th>
+                        <!-- تعويض الحقول الجديدة في الصف الثاني -->
                         <th class="fake-rowspan-bottom"></th>
                         <th class="fake-rowspan-bottom"></th>
                         <th class="fake-rowspan-bottom"></th>
                         <th class="fake-rowspan-bottom no-print"></th>
                     </tr>
                 </thead>
-                <tbody id="tableBody">
-                    <!-- سيتم إضافة البيانات هنا بواسطة الجافاسكربت -->
-                </tbody>
+                <tbody id="tableBody"></tbody>
             </table>
         </div>
     </div>
 </div>
 
 <script>
-    // تهيئة البيانات من LocalStorage
     let records = JSON.parse(localStorage.getItem('agriRecords')) || [];
 
-    // استرجاع معلومات الرأس (الموقع، العامل...)
+    // استرجاع الرأس
     document.getElementById('siteName').value = localStorage.getItem('siteName') || '';
     document.getElementById('cropType').value = localStorage.getItem('cropType') || '';
     document.getElementById('workerName').value = localStorage.getItem('workerName') || '';
     document.getElementById('plantDate').value = localStorage.getItem('plantDate') || '';
 
-    // حفظ معلومات الرأس تلقائياً عند تغييرها
     const headerInputs = ['siteName', 'cropType', 'workerName', 'plantDate'];
     headerInputs.forEach(id => {
         document.getElementById(id).addEventListener('input', function() {
@@ -292,7 +254,6 @@
         });
     });
 
-    // دالة عرض البيانات في الجدول
     function renderTable() {
         const tbody = document.getElementById('tableBody');
         tbody.innerHTML = '';
@@ -310,6 +271,9 @@
                 <td>${rec.sysEfficiency || '-'}</td>
                 <td>${rec.drainEfficiency || '-'}</td>
                 <td>${rec.tempHumid || '-'}</td>
+                <td>${rec.plantLength || '-'}</td>
+                <td>${rec.branchCount || '-'}</td>
+                <td>${rec.flowerCount || '-'}</td>
                 <td class="no-print">
                     <button class="btn-edit" onclick="editRecord(${index})">تعديل</button>
                     <button class="btn-delete" onclick="deleteRecord(${index})">حذف</button>
@@ -319,13 +283,9 @@
         });
     }
 
-    // دالة حفظ / تحديث السجل
     function saveRecord() {
         const entryDate = document.getElementById('entryDate').value;
-        if(!entryDate) {
-            alert("الرجاء إدخال التاريخ على الأقل!");
-            return;
-        }
+        if(!entryDate) { alert("الرجاء إدخال التاريخ!"); return; }
 
         const record = {
             entryDate: document.getElementById('entryDate').value,
@@ -338,17 +298,18 @@
             addAmount: document.getElementById('addAmount').value,
             sysEfficiency: document.getElementById('sysEfficiency').value,
             drainEfficiency: document.getElementById('drainEfficiency').value,
-            tempHumid: document.getElementById('tempHumid').value
+            tempHumid: document.getElementById('tempHumid').value,
+            plantLength: document.getElementById('plantLength').value,
+            branchCount: document.getElementById('branchCount').value,
+            flowerCount: document.getElementById('flowerCount').value
         };
 
         const editIndex = parseInt(document.getElementById('editIndex').value);
-        if (editIndex === -1) {
-            records.push(record);
-        } else {
+        if (editIndex === -1) records.push(record);
+        else {
             records[editIndex] = record;
             document.getElementById('editIndex').value = "-1";
             document.getElementById('saveBtn').innerText = "حفظ البيانات";
-            document.getElementById('saveBtn').style.backgroundColor = "var(--primary-color)";
         }
 
         localStorage.setItem('agriRecords', JSON.stringify(records));
@@ -356,34 +317,22 @@
         clearForm();
     }
 
-    // دالة تفريغ الحقول
     function clearForm() {
-        document.getElementById('entryDate').value = '';
-        document.getElementById('beforeEC').value = '';
-        document.getElementById('beforePH').value = '';
-        document.getElementById('beforeTDC').value = '';
-        document.getElementById('afterEC').value = '';
-        document.getElementById('afterPH').value = '';
-        document.getElementById('afterTDC').value = '';
-        document.getElementById('addAmount').value = '';
-        document.getElementById('sysEfficiency').value = '';
-        document.getElementById('drainEfficiency').value = '';
-        document.getElementById('tempHumid').value = '';
+        ['entryDate','beforeEC','beforePH','beforeTDC','afterEC','afterPH','afterTDC','addAmount','sysEfficiency','drainEfficiency','tempHumid','plantLength','branchCount','flowerCount'].forEach(id => {
+            document.getElementById(id).value = '';
+        });
         document.getElementById('editIndex').value = "-1";
         document.getElementById('saveBtn').innerText = "حفظ البيانات";
-        document.getElementById('saveBtn').style.backgroundColor = "var(--primary-color)";
     }
 
-    // دالة حذف سجل
     function deleteRecord(index) {
-        if(confirm("هل أنت متأكد من حذف هذا السجل؟")) {
+        if(confirm("هل أنت متأكد؟")) {
             records.splice(index, 1);
             localStorage.setItem('agriRecords', JSON.stringify(records));
             renderTable();
         }
     }
 
-    // دالة جلب البيانات للتعديل
     function editRecord(index) {
         const rec = records[index];
         document.getElementById('entryDate').value = rec.entryDate || '';
@@ -397,42 +346,38 @@
         document.getElementById('sysEfficiency').value = rec.sysEfficiency || '';
         document.getElementById('drainEfficiency').value = rec.drainEfficiency || '';
         document.getElementById('tempHumid').value = rec.tempHumid || '';
+        document.getElementById('plantLength').value = rec.plantLength || '';
+        document.getElementById('branchCount').value = rec.branchCount || '';
+        document.getElementById('flowerCount').value = rec.flowerCount || '';
 
         document.getElementById('editIndex').value = index;
         document.getElementById('saveBtn').innerText = "تحديث البيانات";
-        document.getElementById('saveBtn').style.backgroundColor = "#fbc02d";
-        document.getElementById('saveBtn').style.color = "black";
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // دالة التصدير إلى PDF
     function exportPDF() {
         const element = document.getElementById('mainContainer');
-        // إخفاء الأزرار مؤقتاً
         const noPrintElements = document.querySelectorAll('.no-print');
         noPrintElements.forEach(el => el.style.display = 'none');
-
-        // إضافة كلاس الطباعة لتحويل الحقول إلى نصوص عادية
         element.classList.add('printing');
 
         const opt = {
-            margin:       10,
-            filename:     'تقرير_المحاليل_الزراعية.pdf',
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2 },
-            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
+            margin: 5,
+            filename: 'تقرير_المحميات_المطور.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
         };
 
-        // إنشاء الـ PDF ثم إعادة كل شيء كما كان
         html2pdf().set(opt).from(element).save().then(() => {
             noPrintElements.forEach(el => el.style.display = '');
             element.classList.remove('printing');
         });
     }
 
-    // استدعاء دالة عرض الجدول عند تحميل الصفحة
     window.onload = renderTable;
 </script>
 
 </body>
 </html>
+
