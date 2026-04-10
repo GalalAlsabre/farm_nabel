@@ -205,7 +205,7 @@
         <div class="table-responsive" id="printArea">
             <table id="dataTable">
                 <colgroup>
-                    <col style="width: 85px;">
+                    <col style="width: 105px;">
                     <col style="width: 55px;">
                     <col style="width: 55px;">
                     <col style="width: 55px;">
@@ -276,7 +276,7 @@
         records.forEach((rec, index) => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td>${rec.entryDate || '-'}</td>
+                <td style="white-space: nowrap;">${rec.entryDate || '-'}</td>
                 <td>${rec.beforeTDC || '-'}</td>
                 <td>${rec.beforePH || '-'}</td>
                 <td>${rec.beforeEC || '-'}</td>
