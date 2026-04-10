@@ -117,6 +117,7 @@
             padding: 8px;
             text-align: center;
             vertical-align: middle;
+            /* ======= التعديل الوحيد: الكسر بين الكلمات فقط لا من وسطها ======= */
             white-space: normal;
             word-break: keep-all;
             overflow-wrap: anywhere;
@@ -138,22 +139,20 @@
             padding-top: 6px;
         }
 
-        .printing .header-info {
-            border-bottom: none;
-            grid-template-columns: repeat(4, 1fr);
-            /* ===== الحل: إزاحة الـ header من الحافة اليمنى لمنع قطع الاسم ===== */
-            padding-right: 10px;
-        }
-        .printing .header-info input {
-            border: none !important;
-            background: transparent !important;
-            padding: 0 !important;
-            color: black !important;
-            font-weight: bold !important;
-            font-size: 16px !important;
-            text-align: right !important;
-            direction: rtl !important;
-        }
+        .printing .header-info { border-bottom: none; grid-template-columns: repeat(4, 1fr); }
+       .printing .header-info input {
+    border: none !important;
+    background: transparent !important;
+    /* التعديل هنا: إضافة مسافة 8 بيكسل من اليمين واليسار لمنع قص الحروف */
+    padding: 0 8px !important; 
+    color: black !important;
+    font-weight: bold !important;
+    font-size: 16px !important;
+    text-align: right !important;
+    direction: rtl !important;
+    width: 95%; /* لضمان عدم خروج النص عن الإطار */
+}
+
         .printing .header-info input[type="date"]::-webkit-calendar-picker-indicator { display: none; }
         
         @media print {
