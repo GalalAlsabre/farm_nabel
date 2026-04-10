@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>سجل قياسات المحاليل الزراعية</title>
-    <!-- استدعاء خط تاجوال من جوجل -->
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- مكتبة تحويل الصفحة إلى PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
@@ -105,18 +103,24 @@
         .btn-export { background-color: #1976D2; margin-bottom: 15px; }
         .btn-export:hover { background-color: #1565C0; }
         .table-responsive { overflow-x: auto; }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
             background: white;
             font-size: 14px;
+            table-layout: fixed;
         }
         th, td {
             border: 1px solid var(--border-color);
             padding: 8px;
             text-align: center;
             vertical-align: middle;
+            /* ======= التعديل الوحيد: الكسر بين الكلمات فقط لا من وسطها ======= */
+            white-space: normal;
+            word-break: keep-all;
+            overflow-wrap: anywhere;
         }
         th {
             background-color: var(--primary-color);
@@ -125,7 +129,6 @@
         }
         tr:nth-child(even) { background-color: #f9f9f9; }
 
-        /* ======== خدعة الـ Rowspan للـ PDF ======== */
         .fake-rowspan-top {
             border-bottom: none !important;
             vertical-align: bottom;
@@ -189,7 +192,6 @@
             <div class="input-group"><label>كفاءة نظام التصريف</label><input type="text" id="sysEfficiency"></div>
             <div class="input-group"><label>كفاءة التصريف</label><input type="text" id="drainEfficiency"></div>
             <div class="input-group"><label>الحرارة والرطوبة</label><input type="text" id="tempHumid"></div>
-            <!-- الحقول الجديدة -->
             <div class="input-group"><label>طول النبات</label><input type="text" id="plantLength"></div>
             <div class="input-group"><label>عدد الفروع</label><input type="text" id="branchCount"></div>
             <div class="input-group"><label>الأزهار</label><input type="text" id="flowerCount"></div>
@@ -202,6 +204,23 @@
         <button class="btn-export no-print" onclick="exportPDF()">📄 تصدير التقرير كملف PDF</button>
         <div class="table-responsive" id="printArea">
             <table id="dataTable">
+                <colgroup>
+                    <col style="width: 85px;">
+                    <col style="width: 55px;">
+                    <col style="width: 55px;">
+                    <col style="width: 55px;">
+                    <col style="width: 55px;">
+                    <col style="width: 55px;">
+                    <col style="width: 55px;">
+                    <col style="width: 90px;">
+                    <col style="width: 80px;">
+                    <col style="width: 80px;">
+                    <col style="width: 80px;">
+                    <col style="width: 70px;">
+                    <col style="width: 70px;">
+                    <col style="width: 70px;">
+                    <col style="width: 100px;">
+                </colgroup>
                 <thead>
                     <tr>
                         <th class="fake-rowspan-top">التاريخ</th>
@@ -211,7 +230,6 @@
                         <th class="fake-rowspan-top">نظام التصريف</th>
                         <th class="fake-rowspan-top">كفاءة التصريف</th>
                         <th class="fake-rowspan-top">الحرارة والرطوبة</th>
-                        <!-- رؤوس الأعمدة الجديدة -->
                         <th class="fake-rowspan-top">طول النبات</th>
                         <th class="fake-rowspan-top">عدد الفروع</th>
                         <th class="fake-rowspan-top">الأزهار</th>
@@ -225,7 +243,6 @@
                         <th class="fake-rowspan-bottom"></th>
                         <th class="fake-rowspan-bottom"></th>
                         <th class="fake-rowspan-bottom"></th>
-                        <!-- تعويض الحقول الجديدة في الصف الثاني -->
                         <th class="fake-rowspan-bottom"></th>
                         <th class="fake-rowspan-bottom"></th>
                         <th class="fake-rowspan-bottom"></th>
@@ -241,7 +258,6 @@
 <script>
     let records = JSON.parse(localStorage.getItem('agriRecords')) || [];
 
-    // استرجاع الرأس
     document.getElementById('siteName').value = localStorage.getItem('siteName') || '';
     document.getElementById('cropType').value = localStorage.getItem('cropType') || '';
     document.getElementById('workerName').value = localStorage.getItem('workerName') || '';
@@ -380,4 +396,3 @@
 
 </body>
 </html>
-
